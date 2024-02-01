@@ -31,7 +31,7 @@ namespace DevFreela.UnitTests.Application.Queries
             // Assert
             Assert.Equal(project.Id, projectDetailsViewModel.Id);
 
-            projectRepositoryMock.Verify(pr => pr.GetByIdAsync(project.Id), Times.Once);
+            projectRepositoryMock.Verify(pr => pr.GetByIdAsync(project.Id).Result, Times.Once);
 
         }
     }
