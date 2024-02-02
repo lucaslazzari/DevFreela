@@ -1,5 +1,6 @@
 ﻿using Dapper;
 using DevFreela.Core.DTOs;
+using DevFreela.Core.Entities;
 using DevFreela.Core.Repositories;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
@@ -18,7 +19,7 @@ namespace Devfreela.Infrastructure.Persistence.Repositories
         {
             _connectionString = configuration.GetConnectionString("DevFreelaCs");
         }
-        public async Task<List<SkillDTO>> GetAllAsync()
+        public async Task<List<Skill>> GetAllAsync()
         {
             //*DAPPER*
             using (var sqlConnection = new SqlConnection(_connectionString))
@@ -27,7 +28,7 @@ namespace Devfreela.Infrastructure.Persistence.Repositories
 
                 var script = "SELECT Id, Description FROM Skills";
 
-                var skills = await sqlConnection.QueryAsync<SkillDTO>(script);
+                var skills = await sqlConnection.QueryAsync<Skill>(script);
 
                 return skills.ToList();
             }

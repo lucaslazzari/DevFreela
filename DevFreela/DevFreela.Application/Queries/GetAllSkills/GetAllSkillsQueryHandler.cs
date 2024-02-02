@@ -24,7 +24,13 @@ namespace DevFreela.Application.Queries.GetAllSkills
         }
         public async Task<List<SkillDTO>> Handle(GetAllSkillsQuery request, CancellationToken cancellationToken)
         {
-            return await _skillRepository.GetAllAsync();
+            var skills = await _skillRepository.GetAllAsync();
+
+            var skillsViewModel = skills
+                .Select(s => new SkillDTO(s.Id,s.Description))
+                .ToList();
+
+            return skillsViewModel;
         }
     }
 }

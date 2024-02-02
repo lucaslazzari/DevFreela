@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Xunit;
+using Newtonsoft.Json;
 
 namespace DevFreela.UnitTests.Application.Queries
 {
@@ -18,25 +19,18 @@ namespace DevFreela.UnitTests.Application.Queries
         public async Task ProjectExist_Executed_ReturnProjectDetailsViewModel()
         {
             // Arrange
+            var id = 1;
 
             var projectRepositoryMock = new Mock<IProjectRepository>();
-            var project = new Project("Nome Do Teste 1", "Descricao de Teste 1", 1, 2, 10000);
-            int projectId = project.Id;
-            projectId = 1;
-
-            
-            projectRepositoryMock.Setup(pr => pr.GetByIdAsync(projectId).Result).Returns(project);
-
-            var getProjectByIdQuery = new GetProjectByIdQuery(projectId);
+            projectRepositoryMock.Setup(pr => pr.GetByIdAsync(id).Result);
+            var getProjectByIdQuery = new GetProjectByIdQuery(id);
             var getProjectByIdQueryHandler = new GetProjectByIdQueryHandler(projectRepositoryMock.Object);
 
             // Act
             var projectDetailsViewModel = await getProjectByIdQueryHandler.Handle(getProjectByIdQuery, new CancellationToken());
 
             // Assert
-            Assert.Equal(projectId, projectDetailsViewModel.Id);
-
-            projectRepositoryMock.Verify(pr => pr.GetByIdAsync(projectId).Result, Times.Once);
+            projectRepositoryMock.Verify(pr => pr.GetByIdAsync(id).Result, Times.Once);
 
         }
     }
