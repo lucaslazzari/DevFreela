@@ -1,6 +1,6 @@
-﻿using Devfreela.Infrastructure.Services;
-using DevFreela.Application.ViewModels;
+﻿using DevFreela.Application.ViewModels;
 using DevFreela.Core.Repositories;
+using DevFreela.Core.Services;
 using MediatR;
 using System;
 using System.Collections.Generic;

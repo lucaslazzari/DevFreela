@@ -14,7 +14,7 @@ namespace DevFreela.Core.DTOs
             Description = description;
         }
 
-        public int Id { get; set; }
-        public string Description {  get; set; }
+        public int Id { get; private set; }
+        public string Description {  get; private set; }
     }
 }

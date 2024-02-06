@@ -1,7 +1,7 @@
 ﻿using Devfreela.Infrastructure.Persistence;
-using Devfreela.Infrastructure.Services;
 using DevFreela.Core.Entities;
 using DevFreela.Core.Repositories;
+using DevFreela.Core.Services;
 using MediatR;
 using System;
 using System.Collections.Generic;

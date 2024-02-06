@@ -68,15 +68,16 @@ namespace DevFreela.API.Controllers
                 return BadRequest();
             }
 
+            command.Id = id;
             await _mediator.Send(command);
 
             return NoContent();
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> Delete(int id, [FromBody] DeleteProjectCommand command)
         {
-            var command = new DeleteProjectCommand(id);
+            command.Id = id;
             await _mediator.Send(command);
 
             return NoContent();
@@ -92,9 +93,9 @@ namespace DevFreela.API.Controllers
 
         // api/projects/{id}/start
         [HttpPut("{id}/start")]
-        public async Task<IActionResult> Start(int id)
+        public async Task<IActionResult> Start(int id, [FromBody] StartProjectCommand command)
         {
-            var command = new StartProjectCommand(id);
+            command.Id = id;
             await _mediator.Send(command);
 
             return NoContent();
@@ -102,10 +103,16 @@ namespace DevFreela.API.Controllers
 
         // api/projects/{id}/finish
         [HttpPut("{id}/finish")]
-        public async Task<IActionResult> Finish(int id)
+        public async Task<IActionResult> Finish(int id, [FromBody] FinishProjectCommand command)
         {
-            var command = new FinishProjectCommand(id);
-            await _mediator.Send(command);
+            command.Id = id;
+
+            var result = await _mediator.Send(command);
+
+            if (!result)
+            {
+                return BadRequest("O pagamento não pode ser processado");
+            }
 
             return NoContent();
         }

@@ -1,12 +1,12 @@
 using Devfreela.Infrastructure.Auth;
 using Devfreela.Infrastructure.Persistence;
 using Devfreela.Infrastructure.Persistence.Repositories;
-using Devfreela.Infrastructure.Services;
 using DevFreela.API.Filters;
 using DevFreela.Application.Commands.CreateProject;
 using DevFreela.Application.Commands.CreateUser;
 using DevFreela.Application.Validators;
 using DevFreela.Core.Repositories;
+using DevFreela.Core.Services;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using MediatR;
