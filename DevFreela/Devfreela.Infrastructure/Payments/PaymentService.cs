@@ -1,20 +1,32 @@
 ﻿using DevFreela.Core.DTOs;
 using DevFreela.Core.Services;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Identity.Client;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace Devfreela.Infrastructure.Payments
 {
     public class PaymentService : IPaymentService
     {
-        public Task<bool> ProcessPayment(PaymentInfoDTO paymentInfoDTO)
+        private readonly IMessageBusService _messageBusService;
+        private const string QUEUE_NAME = "Payments";
+        public PaymentService(IMessageBusService messageBusService)
         {
-            // Implementar lógica de pagamento com Gateway de Pagamento
+            _messageBusService = messageBusService;
+        }
+        public void ProcessPayment(PaymentInfoDTO paymentInfoDTO)
+        {
+            var paymentInfoJson = JsonSerializer.Serialize(paymentInfoDTO);
 
-            return Task.FromResult(true);
+            var paymentInfoBytes = Encoding.UTF8.GetBytes(paymentInfoJson);
+
+            _messageBusService.Publish(QUEUE_NAME, paymentInfoBytes);
+            
         }
     }
 }

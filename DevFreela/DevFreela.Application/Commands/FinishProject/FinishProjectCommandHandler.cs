@@ -1,13 +1,7 @@
-﻿using Devfreela.Infrastructure.Persistence;
-using DevFreela.Core.DTOs;
+﻿using DevFreela.Core.DTOs;
 using DevFreela.Core.Repositories;
 using DevFreela.Core.Services;
 using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DevFreela.Application.Commands.FinishProject
 {
@@ -24,18 +18,15 @@ namespace DevFreela.Application.Commands.FinishProject
         {
             var project = await _projectRepository.GetByIdAsync(request.Id);
 
-            project.Finish();
-
             var paymentInfoDto = new PaymentInfoDTO(request.Id, request.CreditCardNumber, request.Cvv, request.ExpiresAt, request.FullName);
 
-            var result = await _paymentService.ProcessPayment(paymentInfoDto);
-
-            if (!result) 
-                project.SetPaymentPending();
+            _paymentService.ProcessPayment(paymentInfoDto);
+ 
+            project.SetPaymentPending();
                 
             await _projectRepository.SaveChangesAsync(project);
 
-            return result;
+            return true;
         }
     }
 }

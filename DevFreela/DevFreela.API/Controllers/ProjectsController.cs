@@ -51,6 +51,7 @@ namespace DevFreela.API.Controllers
         }
 
         [HttpPost]
+        [AllowAnonymous]
         public async Task<IActionResult> Post([FromBody] CreateProjectCommand command)
         {
             var id = await _mediator.Send(command);
@@ -93,6 +94,7 @@ namespace DevFreela.API.Controllers
 
         // api/projects/{id}/start
         [HttpPut("{id}/start")]
+        [AllowAnonymous]
         public async Task<IActionResult> Start(int id, [FromBody] StartProjectCommand command)
         {
             command.Id = id;
@@ -103,6 +105,7 @@ namespace DevFreela.API.Controllers
 
         // api/projects/{id}/finish
         [HttpPut("{id}/finish")]
+        [AllowAnonymous]
         public async Task<IActionResult> Finish(int id, [FromBody] FinishProjectCommand command)
         {
             command.Id = id;
@@ -114,7 +117,7 @@ namespace DevFreela.API.Controllers
                 return BadRequest("O pagamento não pode ser processado");
             }
 
-            return NoContent();
+            return Accepted();
         }
     }
 }

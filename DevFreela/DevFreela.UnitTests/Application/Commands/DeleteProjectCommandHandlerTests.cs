@@ -23,7 +23,7 @@ namespace DevFreela.UnitTests.Application.Commands
             var projectRepositoryMock = new Mock<IProjectRepository>();
             projectRepositoryMock.Setup(pr => pr.GetByIdAsync(project.Id).Result).Returns(project);
 
-            var deleteProjectCommand = new DeleteProjectCommand(project.Id);          
+            var deleteProjectCommand = new DeleteProjectCommand();          
 
             var deleteProjectCommandHandler = new DeleteProjectCommandHandler(projectRepositoryMock.Object);
             

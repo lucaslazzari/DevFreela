@@ -1,4 +1,6 @@
 using Devfreela.Infrastructure.Auth;
+using Devfreela.Infrastructure.MessageBus;
+using Devfreela.Infrastructure.Payments;
 using Devfreela.Infrastructure.Persistence;
 using Devfreela.Infrastructure.Persistence.Repositories;
 using DevFreela.API.Filters;
@@ -84,10 +86,14 @@ var connectionString = builder.Configuration.GetConnectionString("DevFreelaCs");
 builder.Services.AddDbContext<DevFreelaDbContext>(
     options => options.UseSqlServer(connectionString));
 
+builder.Services.AddHttpClient();
+
 builder.Services.AddScoped<IProjectRepository, ProjectRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<ISkillRepository, SkillRepository>();
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IPaymentService, PaymentService>();
+builder.Services.AddScoped<IMessageBusService, MessageBusService>();
 
 builder.Services.AddMediatR(cfg => { cfg.RegisterServicesFromAssemblies(typeof(CreateProjectCommand).Assembly); });
 
