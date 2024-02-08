@@ -22,6 +22,9 @@ namespace DevFreela.Application.Commands.StartProject
             if (project.Status == ProjectStatusEnum.Finished) 
                 throw new ProjectAlredyFinishedException();
 
+            if (project.Status == ProjectStatusEnum.Cancelled) 
+                throw new ProjectCancelledException();
+
             project.Start();
 
             await _projectRepository.SaveChangesAsync(project);

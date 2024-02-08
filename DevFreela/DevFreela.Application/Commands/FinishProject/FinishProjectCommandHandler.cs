@@ -1,4 +1,5 @@
 ﻿using DevFreela.Core.DTOs;
+using DevFreela.Core.Enums;
 using DevFreela.Core.Exceptions;
 using DevFreela.Core.Repositories;
 using DevFreela.Core.Services;
@@ -21,6 +22,9 @@ namespace DevFreela.Application.Commands.FinishProject
 
             if (project == null) 
                 throw new ProjectNonExistentException();
+
+            if (project.Status == ProjectStatusEnum.Cancelled) 
+                throw new ProjectCancelledException();
 
             var paymentInfoDto = new PaymentInfoDTO(request.Id, request.CreditCardNumber, request.Cvv, request.ExpiresAt, request.FullName);
 

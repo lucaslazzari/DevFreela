@@ -26,12 +26,18 @@ namespace DevFreela.API.Controllers
         [HttpGet]
         public async Task<IActionResult> Get(string query)
         {
+            try
+            {
+                var getAllProjectsQuery = new GetAllProjectsQuery(query);
 
-            var getAllProjectsQuery = new GetAllProjectsQuery(query);
+                var projects = await _mediator.Send(getAllProjectsQuery);
 
-            var projects = await _mediator.Send(getAllProjectsQuery);
-
-            return Ok(projects);
+                return Ok(projects);
+            }
+            catch(Exception ex)
+            {
+                return BadRequest("Erro inesperado: " + ex.Message);
+            }
         }
 
         // api/projects/{id}
@@ -77,32 +83,48 @@ namespace DevFreela.API.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> Put(int id, [FromBody] UpdateProjectCommand command)
         {
-            if (command.Description.Length > 200)
+            try
             {
-                return BadRequest();
+                command.Id = id;
+                await _mediator.Send(command);
+
+                return NoContent();
             }
-
-            command.Id = id;
-            await _mediator.Send(command);
-
-            return NoContent();
+            catch(Exception ex)
+            {
+                return BadRequest("Erro inesperado: " + ex.Message);
+            }
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id, [FromBody] DeleteProjectCommand command)
         {
-            command.Id = id;
-            await _mediator.Send(command);
+            try
+            {
+                command.Id = id;
+                await _mediator.Send(command);
 
-            return NoContent();
+                return NoContent();
+            }
+            catch(Exception ex)
+            {
+                return BadRequest("Erro inesperado: " + ex.Message);
+            }          
         }
 
         // api/projects/{id}/comments
         [HttpPost("{id}/comments")]
         public async Task<IActionResult> PostComment(int id, [FromBody] CreateCommentCommand command)
         {
-            await _mediator.Send(command);
-            return NoContent();
+            try
+            {
+                await _mediator.Send(command);
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest("Erro inesperado: " + ex.Message);
+            }
         }
 
         // api/projects/{id}/start
@@ -126,6 +148,10 @@ namespace DevFreela.API.Controllers
                 return BadRequest(ex.Message);
             }
             catch(ProjectNonExistentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch(ProjectCancelledException ex)
             {
                 return BadRequest(ex.Message);
             }
@@ -159,6 +185,10 @@ namespace DevFreela.API.Controllers
                 return BadRequest(ex.Message);
             }
             catch(ProjectAlredyFinishedException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch(ProjectCancelledException ex)
             {
                 return BadRequest(ex.Message);
             }
