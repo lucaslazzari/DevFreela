@@ -1,13 +1,8 @@
-﻿using Devfreela.Infrastructure.Persistence;
-using DevFreela.Core.Entities;
+﻿using DevFreela.Core.Entities;
+using DevFreela.Core.Exceptions;
 using DevFreela.Core.Repositories;
 using DevFreela.Core.Services;
 using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DevFreela.Application.Commands.CreateUser
 {
@@ -25,6 +20,9 @@ namespace DevFreela.Application.Commands.CreateUser
             var passwordHash = _authService.ComputeSha256Hash(request.Password);
 
             var user = new User(request.FullName, request.Email, request.BirthDate, passwordHash, request.Role);
+
+            if (await _userRepository.GetUserByEmailAsync(user.Email) != null) 
+                throw new UserAlredyExistException();
 
             await _userRepository.AddAsync(user);
             

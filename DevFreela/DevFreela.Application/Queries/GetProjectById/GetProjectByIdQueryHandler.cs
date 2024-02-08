@@ -1,14 +1,8 @@
-﻿using Devfreela.Infrastructure.Persistence;
-using DevFreela.Application.ViewModels;
+﻿using DevFreela.Application.ViewModels;
 using DevFreela.Core.Entities;
+using DevFreela.Core.Exceptions;
 using DevFreela.Core.Repositories;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DevFreela.Application.Queries.GetProjectById
 {
@@ -23,7 +17,8 @@ namespace DevFreela.Application.Queries.GetProjectById
         {
             Project project = await _projectRepository.GetByIdAsync(request.Id);
 
-            if (project == null) return null;
+            if (project == null) 
+                throw new ProjectNonExistentException();
 
             var projectsDetailsViewModel = new ProjectDetailsViewModel(
                 project.Id,

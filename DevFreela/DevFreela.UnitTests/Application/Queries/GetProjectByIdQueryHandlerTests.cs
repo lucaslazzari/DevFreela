@@ -1,15 +1,7 @@
 ﻿using DevFreela.Application.Queries.GetProjectById;
-using DevFreela.Application.ViewModels;
-using DevFreela.Core.Entities;
 using DevFreela.Core.Repositories;
 using Moq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Xunit;
-using Newtonsoft.Json;
 
 namespace DevFreela.UnitTests.Application.Queries
 {

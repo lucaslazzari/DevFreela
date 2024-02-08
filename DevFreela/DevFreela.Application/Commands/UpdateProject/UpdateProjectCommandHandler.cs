@@ -1,11 +1,5 @@
-﻿using Devfreela.Infrastructure.Persistence;
-using DevFreela.Core.Repositories;
+﻿using DevFreela.Core.Repositories;
 using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DevFreela.Application.Commands.UpdateProject
 {

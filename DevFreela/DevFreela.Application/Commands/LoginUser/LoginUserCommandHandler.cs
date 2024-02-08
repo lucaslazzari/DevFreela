@@ -1,12 +1,8 @@
 ﻿using DevFreela.Application.ViewModels;
+using DevFreela.Core.Exceptions;
 using DevFreela.Core.Repositories;
 using DevFreela.Core.Services;
 using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DevFreela.Application.Commands.LoginUser
 {
@@ -27,11 +23,8 @@ namespace DevFreela.Application.Commands.LoginUser
             // Buscar no DB um user com o mesmo email e senha encriptografada(Hash)
             var user = await _userRepository.GetUserByEmailAndPasswordAsync(request.Email, passwordHash);
 
-            // Se nao existir, erro no login
-            if(user == null)
-            {
-                return null;
-            }
+            if (user == null) 
+                throw new UserNonExistentException();
 
             // Se existir, gero o token usando dados do user
             var token = _authService.GenerateJwtToken(user.Email, user.Role);

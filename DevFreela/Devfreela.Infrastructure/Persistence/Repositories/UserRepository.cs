@@ -1,11 +1,6 @@
 ﻿using DevFreela.Core.Entities;
 using DevFreela.Core.Repositories;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Devfreela.Infrastructure.Persistence.Repositories
 {
@@ -31,6 +26,11 @@ namespace Devfreela.Infrastructure.Persistence.Repositories
         public async Task<User> GetUserByEmailAndPasswordAsync(string email, string passwordHash)
         {
             return await _dbContext.Users.SingleOrDefaultAsync(u => u.Email == email && u.Password == passwordHash);
+        }
+
+        public async Task<User> GetUserByEmailAsync(string email)
+        {
+            return await _dbContext.Users.SingleOrDefaultAsync(u => u.Email == email);
         }
     }
 }

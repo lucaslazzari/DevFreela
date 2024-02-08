@@ -1,7 +1,7 @@
-﻿using DevFreela.API.Models;
-using DevFreela.Application.Commands.CreateUser;
+﻿using DevFreela.Application.Commands.CreateUser;
 using DevFreela.Application.Commands.LoginUser;
 using DevFreela.Application.Queries.GetUser;
+using DevFreela.Core.Exceptions;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -21,14 +21,18 @@ namespace DevFreela.API.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetByid(int id)
         {
-            var getUser = new GetUserQuery(id);
-            var users = await _mediator.Send(getUser);
-            if(users == null)
+            try
             {
-                return NotFound();
-            }
+                var getUser = new GetUserQuery(id);
 
-            return Ok(users);
+                var users = await _mediator.Send(getUser);
+
+                return Ok(users);
+            }
+            catch(UserNonExistentException ex) 
+            {
+                return BadRequest(ex.Message);
+            }          
         }
 
         // api/users
@@ -36,9 +40,16 @@ namespace DevFreela.API.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Post([FromBody] CreateUserCommand command)
         {
-            var id = await _mediator.Send(command);
+            try
+            {
+                var id = await _mediator.Send(command);
 
-            return CreatedAtAction(nameof(GetByid), new { id = id }, command);
+                return CreatedAtAction(nameof(GetByid), new { id = id }, command);
+            }
+            catch(UserAlredyExistException ex) 
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         // api/users/{id}/login
@@ -46,14 +57,17 @@ namespace DevFreela.API.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Login([FromBody] LoginUserCommand command)
         {
-            var loginUserViewModel = await _mediator.Send(command);
-
-            if (loginUserViewModel == null)
+            try
             {
-                return BadRequest();
-            }
+                var loginUserViewModel = await _mediator.Send(command);
 
-            return Ok(loginUserViewModel);
+                return Ok(loginUserViewModel);
+            }
+            catch(UserNonExistentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            
         }
     }
 }

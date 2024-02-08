@@ -1,5 +1,4 @@
-﻿using DevFreela.API.Models;
-using DevFreela.Application.Commands.CreateComment;
+﻿using DevFreela.Application.Commands.CreateComment;
 using DevFreela.Application.Commands.CreateProject;
 using DevFreela.Application.Commands.DeleteProject;
 using DevFreela.Application.Commands.FinishProject;
@@ -7,6 +6,7 @@ using DevFreela.Application.Commands.StartProject;
 using DevFreela.Application.Commands.UpdateProject;
 using DevFreela.Application.Queries.GetAllProjects;
 using DevFreela.Application.Queries.GetProjectById;
+using DevFreela.Core.Exceptions;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -38,26 +38,39 @@ namespace DevFreela.API.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id) 
         {
-            var getProject = new GetProjectByIdQuery(id);
-
-            var projects = await _mediator.Send(getProject);
-
-            if(projects == null)
+            try
             {
-                return NotFound();
-            }
+                var getProject = new GetProjectByIdQuery(id);
 
-            return Ok(projects);
+                var projects = await _mediator.Send(getProject);
+
+                return Ok(projects);
+            }
+            catch(ProjectNonExistentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch(Exception ex)
+            {
+                return BadRequest("Erro inesperado: " + ex.Message);
+            }
+            
         }
 
         [HttpPost]
         [AllowAnonymous]
         public async Task<IActionResult> Post([FromBody] CreateProjectCommand command)
         {
-            var id = await _mediator.Send(command);
-            // Cadastro o projeto
+            try
+            {
+                var id = await _mediator.Send(command);
 
-            return CreatedAtAction(nameof(GetById), new { id = id }, command);
+                return CreatedAtAction(nameof(GetById), new { id = id }, command);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest("Erro inesperado: " + ex.Message);
+            }
         }
 
         // api/projects/{id}
@@ -97,10 +110,30 @@ namespace DevFreela.API.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Start(int id, [FromBody] StartProjectCommand command)
         {
-            command.Id = id;
-            await _mediator.Send(command);
+            try
+            {
+                command.Id = id;
+                await _mediator.Send(command);
 
-            return NoContent();
+                return NoContent();
+            }
+            catch(ProjectAlreadyStartedException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch(ProjectAlredyFinishedException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch(ProjectNonExistentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch(Exception ex)
+            {
+                return BadRequest("Erro inesperado: " + ex.Message);
+            }
+            
         }
 
         // api/projects/{id}/finish
@@ -108,16 +141,32 @@ namespace DevFreela.API.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Finish(int id, [FromBody] FinishProjectCommand command)
         {
-            command.Id = id;
-
-            var result = await _mediator.Send(command);
-
-            if (!result)
+            try
             {
-                return BadRequest("O pagamento não pode ser processado");
-            }
+                command.Id = id;
 
-            return Accepted();
+                var result = await _mediator.Send(command);
+
+                if (!result)
+                {
+                    return BadRequest("O pagamento não pode ser processado");
+                }
+
+                return Accepted();
+            }
+            catch(ProjectNonExistentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch(ProjectAlredyFinishedException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch(Exception ex)
+            {
+                return BadRequest("Erro Inesperado: " + ex.Message);
+            }
+            
         }
     }
 }

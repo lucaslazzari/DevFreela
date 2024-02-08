@@ -1,14 +1,8 @@
 ﻿using Dapper;
-using DevFreela.Core.DTOs;
 using DevFreela.Core.Entities;
 using DevFreela.Core.Repositories;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Devfreela.Infrastructure.Persistence.Repositories
 {

@@ -1,13 +1,7 @@
-﻿using Devfreela.Infrastructure.Persistence;
+﻿using DevFreela.Core.Enums;
+using DevFreela.Core.Exceptions;
 using DevFreela.Core.Repositories;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Query.Internal;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DevFreela.Application.Commands.StartProject
 {
@@ -21,6 +15,12 @@ namespace DevFreela.Application.Commands.StartProject
         public async Task<Unit> Handle(StartProjectCommand request, CancellationToken cancellationToken)
         {
             var project = await _projectRepository.GetByIdAsync(request.Id);
+
+            if (project.Status == ProjectStatusEnum.InProgress) 
+                throw new ProjectAlreadyStartedException();
+
+            if (project.Status == ProjectStatusEnum.Finished) 
+                throw new ProjectAlredyFinishedException();
 
             project.Start();
 
