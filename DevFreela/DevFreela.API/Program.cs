@@ -6,6 +6,7 @@ using Devfreela.Infrastructure.Persistence.Repositories;
 using DevFreela.API.Filters;
 using DevFreela.Application.Commands.CreateProject;
 using DevFreela.Application.Commands.CreateUser;
+using DevFreela.Application.Consumers;
 using DevFreela.Application.Validators;
 using DevFreela.Core.Repositories;
 using DevFreela.Core.Services;
@@ -94,6 +95,7 @@ builder.Services.AddScoped<ISkillRepository, SkillRepository>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IPaymentService, PaymentService>();
 builder.Services.AddScoped<IMessageBusService, MessageBusService>();
+builder.Services.AddHostedService<PaymentApprovedConsumer>();
 
 builder.Services.AddMediatR(cfg => { cfg.RegisterServicesFromAssemblies(typeof(CreateProjectCommand).Assembly); });
 
