@@ -4,12 +4,12 @@
 Desenvolvimento de uma plataforma para cadastrar e contratar serviços freelancer para áreas de desenvolvimento
 # Tecnlogias Utilizadas 
 <h3>Linguagens<h3>
-</ul>
+<ul>
     <li>Asp.Net</li>
     <li>C#</li>
 </ul>
 <h3>Frameworks<h3>
-</ul>    
+<ul>    
     <li>Entity Framework</li>
     <li>Dapper</li>
     <li>MediatR</li>
