@@ -3,16 +3,29 @@
 # Sobre o Projeto
 Desenvolvimento de uma plataforma para cadastrar e contratar serviços freelancer para áreas de desenvolvimento
 # Tecnlogias Utilizadas 
-<h2>Bolo Delícia</h2>
-<h3>Ingredientes</h3>
-<ul>
-    <li>2 xícaras de farinha de trigo</li>
-    <li>2 ovos</li>
-    <li>1/2 xícara de leite</li>
+<h3>Linguagens<h3>
 </ul>
-<h3>Modo de preparo</h3>
-<ol>
-    <li>Misture os ingredientes</li>
-    <li>Despeje no lixo</li>
-    <li>Não repita isso em casa</li>
-</ol>
+    <li>Asp.Net</li>
+    <li>C#</li>
+</ul>
+<h3>Frameworks<h3>
+</ul>    
+    <li>Entity Framework</li>
+    <li>Dapper</li>
+    <li>MediatR</li>
+    <li>Jwt Token</li>
+    <li>RabbitMQ</li>
+</ul>
+<h3>Banco de dados</h3>
+<ul>
+    <li>SQL Server</li>
+</ul>
+<h3>Validação de Dados</h3>
+<ul>
+    <li>Fluent Validation</li>
+</ul>
+<h3>Testes Unitários</h3>
+<ul>
+    <li>xUnit</li>
+    <li>MOQ</li>
+</ul>
