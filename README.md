@@ -16,6 +16,12 @@ Desenvolvimento de uma plataforma para cadastrar e contratar serviços freelance
     <li>Jwt Token</li>
     <li>RabbitMQ</li>
 </ul>
+<h3>Padrões</h3>
+<ul>
+    <li>Arquitetura Limpa</li>
+    <li>Padrão Repository</li>
+    <li>CQRS</li>
+</ul>
 <h3>Banco de dados</h3>
 <ul>
     <li>SQL Server</li>
